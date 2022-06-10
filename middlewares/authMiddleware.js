@@ -8,7 +8,7 @@ export async function validaToken(req, res, next) {
 
     try {
         const session = await connection.query(`SELECT * FROM sessions WHERE token = $1`,[token]);
-        if (!session) return res.status(401).send("No session."); // unauthorized
+        if (!session.rows[0]) return res.status(401).send("No session."); // unauthorized
 
         res.locals.user = session.rows[0].userId;
 
