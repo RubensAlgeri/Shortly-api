@@ -19,8 +19,8 @@ export async function signUp(req, res) {
         VALUES ($1,$2,$3)`, [name, email, passwordHash])
 
         res.sendStatus(201);
-    } catch (error) {
-        res.sendStatus(409)
+    } catch (err) {
+        res.status(409).send("já existe uma conta com este email!")
     }
 
 }

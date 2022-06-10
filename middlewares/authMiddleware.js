@@ -1,4 +1,4 @@
-import db from "./../db.js";
+import connection from "./../db.js";
 
 export async function validaToken(req, res, next) {
     const { authorization } = req.headers;
@@ -7,13 +7,10 @@ export async function validaToken(req, res, next) {
     if (!token) return res.status(401).send("No token."); // unauthorized
 
     try {
-        const session = await db.collection("sessions").findOne({ token });
+        const session = await connection.query(`SELECT * FROM sessions WHERE token = $1`,[token]);
         if (!session) return res.status(401).send("No session."); // unauthorized
 
-        const user = await db.collection("users").findOne({ _id: session.userId });
-        if (!user) return res.sendStatus(404); // not found
-
-        res.locals.user = user;
+        res.locals.user = session.rows[0].userId;
 
         next();
     } catch (error) {
