@@ -11,3 +11,12 @@ export async function postarUrl(req,res){
 
     res.status(201).send(shortUrl);
 }
+
+export async function buscarUrl(req,res){
+    const id = req.params.id;
+
+    const urls = await connection.query(`SELECT urls.id,urls."shortUrl", urls.url FROM urls WHERE id = $1`,[id])
+    if(!urls.rows[0]) return res.sendStatus(404)
+
+    res.send(urls.rows)
+}
