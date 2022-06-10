@@ -9,7 +9,6 @@ export async function signUp(req, res) {
     const { password, confirmPassword } = req.body;
     const name = stripHtml(req.body.name).result.trim();
     const email = stripHtml(req.body.email).result.trim();
-    if (password !== confirmPassword) return res.status(422).send("A senha e sua confirmação precisam ser iguais!")
     const passwordHash = bcrypt.hashSync(password, parseInt(process.env.HASH));
 
     try {
