@@ -20,3 +20,18 @@ export async function buscarUrl(req,res){
 
     res.send(urls.rows)
 }
+
+export async function redirecionar(req,res){
+    const {shortUrl} = req.params;
+
+    const url = await connection.query(`SELECT * FROM urls WHERE "shortUrl" = $1`,[shortUrl])
+
+    if(!url.rows[0])return res.sendStatus(404)
+
+    await connection.query(`UPDATE urls SET "visitCount" = $1 WHERE id = $2`,[url.rows[0].visitCount+1,url.rows[0].id])
+    res.redirect(url.rows[0].url)
+}
+
+export async function deletarUrl(req,res){
+    
+}
